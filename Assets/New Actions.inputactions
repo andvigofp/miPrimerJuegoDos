@@ -7,7 +7,7 @@
             "id": "5aca95d4-8ccb-477d-a08d-0b679edccbc1",
             "actions": [
                 {
-                    "name": "moveRigth",
+                    "name": "MoveRight",
                     "type": "Button",
                     "id": "6203b167-08f6-4d26-b6e1-40b13c28c570",
                     "expectedControlType": "",
@@ -41,6 +41,15 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "MoveLeft",
+                    "type": "Button",
+                    "id": "2e232e55-2baf-43a1-9ccc-334243b31979",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -51,7 +60,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "moveRigth",
+                    "action": "MoveRight",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -62,14 +71,14 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "moveRigth",
+                    "action": "MoveRight",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
                 {
                     "name": "",
                     "id": "ba1cffbc-6212-49fd-8563-2f38275b66ab",
-                    "path": "",
+                    "path": "<Keyboard>/z",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
@@ -80,7 +89,7 @@
                 {
                     "name": "",
                     "id": "1d792d7c-c6a4-43e1-884e-1b973b38d879",
-                    "path": "",
+                    "path": "<Keyboard>/x",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
@@ -91,11 +100,33 @@
                 {
                     "name": "",
                     "id": "b7965551-a089-44d1-b83c-2f7b78482e11",
-                    "path": "",
+                    "path": "<Keyboard>/c",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
                     "action": "block",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "47b924c7-a009-4b68-a1b3-7c075c63c48b",
+                    "path": "<Keyboard>/a",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "MoveLeft",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "979b4dcd-f6ab-4f96-91f7-3bf7e5c2074c",
+                    "path": "<Keyboard>/leftArrow",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "MoveLeft",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

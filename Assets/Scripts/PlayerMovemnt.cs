@@ -1,5 +1,6 @@
 using System.Text.RegularExpressions;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class PlayerMovemnt : MonoBehaviour
 {
@@ -12,17 +13,26 @@ public class PlayerMovemnt : MonoBehaviour
     float velocityx = 5;
 
     Animator animator;
+
+    bool isAttacking;
     
+    bool isBlocking = false;
+
+      int comboStep = 0;
+    float comboTimer = 0.5f;
+    float lastClickTime = 0;
 
     public enum PlayerDir
-{
-    Right,
-    Left
-}
+    {
+        Right,
+        Left
+    }
 
-    void Awake()
+   void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
+        animator = GetComponent<Animator>();
+        playerTransform = transform;
     }
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -35,34 +45,94 @@ public class PlayerMovemnt : MonoBehaviour
     void Update()
     {
         animator.SetFloat("speed", Mathf.Abs(rb.linearVelocityX));
+
+       if (!Keyboard.current.aKey.isPressed &&
+        !Keyboard.current.dKey.isPressed &&
+        !Keyboard.current.leftArrowKey.isPressed &&
+        !Keyboard.current.rightArrowKey.isPressed)
+        {
+        rb.linearVelocity = new Vector2(0, rb.linearVelocity.y);
+        }
+
+        if (isAttacking)
+        return;
+
+         // Si está bloqueando y sigues pulsando C
+        if (isBlocking && Keyboard.current.cKey.isPressed)
+        {
+            animator.SetBool("block", true);
+        }
+        else
+        {
+            animator.SetBool("block", false);
+            isBlocking = false;
+        }
     }
 
-   public void OvenMoveRight()
+    //Presionar X para atacar, si vuelves a presionar, salta al siguiente ataque
+    public void OnAttack()
     {
-        rb.linearVelocity = new Vector2(velocityx, rb.linearVelocityY);
+        if (Time.time - lastClickTime > comboTimer)
+        {
+            comboStep = 0;
+        }
+
+        comboStep++;
+        lastClickTime = Time.time;
+
+        if (comboStep == 1)
+        {
+            animator.SetTrigger("attack1");
+        }
+        else if (comboStep == 2)
+        {
+            animator.SetTrigger("attack2");
+        }
+        else if (comboStep == 3)
+        {
+            animator.SetTrigger("attack3");
+            comboStep = 0;
+        }
+    }
+
+    public void OnBlock()
+    {
+        isBlocking = true;
+    }
+
+    public void OnDeath()
+    {
+        animator.SetTrigger("death");
+    }
+
+    public void OnHurt()
+    {
+        animator.SetTrigger("hurt");
+    }
+
+    public void OnMoveRight()
+    {
+        rb.linearVelocity = new Vector2(velocityx, rb.linearVelocity.y);
         FlipDir(PlayerDir.Right);
-        Debug.Log("Moviendo Right");
     }
 
-    public void OvenMoveLeft()
+    public void OnMoveLeft()
     {
-        rb.linearVelocity = new Vector2(-5, rb.linearVelocityY);
+        rb.linearVelocity = new Vector2(-velocityx, rb.linearVelocity.y);
         FlipDir(PlayerDir.Left);
-        Debug.Log("Moviendo Letft");
+    }  
+    private void FlipDir(PlayerDir direction)
+    {
+        float dirMultiplier = 1f;
+
+        if (direction == PlayerDir.Left)
+            dirMultiplier = -1f;
+
+            playerTransform.localScale = new Vector3(
+            Mathf.Abs(playerTransform.localScale.x) * dirMultiplier,
+            playerTransform.localScale.y,
+            playerTransform.localScale.z
+        );
     }
-
-  private void FlipDir(PlayerDir direction)
-{
-    float dirMultiplier = 1f;
-
-    if (direction == PlayerDir.Left)
-        dirMultiplier = -1f;
-
-    playerTransform.localScale = new Vector3(
-        Mathf.Abs(playerTransform.localScale.x) * dirMultiplier,
-        playerTransform.localScale.y,
-        playerTransform.localScale.z
-    );
-}
 }
 
