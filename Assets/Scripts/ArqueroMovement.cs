@@ -2,11 +2,11 @@ using System.Text.RegularExpressions;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class PlayerMovemnt : MonoBehaviour
+public class ArqueroMovement : MonoBehaviour
 {
 
     Rigidbody2D rb;
-    Transform playerTransform;
+    Transform arqueroTransform;
 
     [SerializeField]
     
@@ -16,7 +16,6 @@ public class PlayerMovemnt : MonoBehaviour
 
     bool isAttacking;
     
-    bool isBlocking = false;
 
     int comboStep = 0;
     float comboTimer = 0.5f;
@@ -27,17 +26,17 @@ public class PlayerMovemnt : MonoBehaviour
 
     bool isGrounded = true;
 
-    public enum PlayerDir
+     public enum ArqueroDir
     {
         Right,
         Left
     }
 
-   void Awake()
+     void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
-        playerTransform = transform;
+        arqueroTransform = transform;
     }
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -61,20 +60,9 @@ public class PlayerMovemnt : MonoBehaviour
 
         if (isAttacking)
         return;
-
-         // Si está bloqueando y sigues pulsando C
-        if (isBlocking && Keyboard.current.cKey.isPressed)
-        {
-            animator.SetBool("block", true);
-        }
-        else
-        {
-            animator.SetBool("block", false);
-            isBlocking = false;
-        }
     }
 
-    public void OnJump()
+     public void OnJump()
     {
         if (isGrounded)
         {
@@ -83,7 +71,7 @@ public class PlayerMovemnt : MonoBehaviour
         }
     }
 
-    //Presionar X para atacar, si vuelves a presionar, salta al siguiente ataque
+     //Presionar X para atacar, si vuelves a presionar, salta al siguiente ataque
     public void OnAttack()
     {
         if (Time.time - lastClickTime > comboTimer)
@@ -101,20 +89,11 @@ public class PlayerMovemnt : MonoBehaviour
         else if (comboStep == 2)
         {
             animator.SetTrigger("attack2");
-        }
-        else if (comboStep == 3)
-        {
-            animator.SetTrigger("attack3");
             comboStep = 0;
         }
     }
 
-    public void OnBlock()
-    {
-        isBlocking = true;
-    }
-
-    public void OnDeath()
+     public void OnDeath()
     {
         animator.SetTrigger("death");
     }
@@ -128,29 +107,29 @@ public class PlayerMovemnt : MonoBehaviour
     public void OnMoveRight()
     {
         rb.linearVelocity = new Vector2(velocityx, rb.linearVelocity.y);
-        FlipDir(PlayerDir.Right);
+        FlipDir(ArqueroDir.Right);
     }
 
     public void OnMoveLeft()
     {
         rb.linearVelocity = new Vector2(-velocityx, rb.linearVelocity.y);
-        FlipDir(PlayerDir.Left);
+        FlipDir(ArqueroDir.Left);
     }
     
 
 
-    private void FlipDir(PlayerDir direction)
+    private void FlipDir(ArqueroDir direction)
     {
         float dirMultiplier = 1f;
 
-        if (direction == PlayerDir.Left)
+        if (direction == ArqueroDir.Left)
             dirMultiplier = -1f;
 
-            playerTransform.localScale = new Vector3(
-            Mathf.Abs(playerTransform.localScale.x) * dirMultiplier,
-            playerTransform.localScale.y,
-            playerTransform.localScale.z
+            arqueroTransform.localScale = new Vector3(
+            Mathf.Abs(arqueroTransform.localScale.x) * dirMultiplier,
+            arqueroTransform.localScale.y,
+            arqueroTransform.localScale.z
         );
     }
-}
 
+}
